@@ -1,0 +1,584 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Moving Pictures Analysis",
+  "params": [
+    {
+      "name": "raindrops",
+      "value": -2,
+      "bind": {"input": "range", "min": -4, "max": 0, "step": 0.01}
+    },
+    {"name": "include_zero", "value": true, "bind": {"input": "checkbox"}}
+  ],
+  "facet": {
+    "row": {
+      "field": "body-site",
+      "type": "nominal",
+      "header": {"labelAngle": 0, "labelAlign": "left"}
+    },
+    "column": {"field": "subject", "type": "nominal"}
+  },
+  "spec": {
+    "width": 600,
+    "height": 150,
+    "layer": [
+      {
+        "mark": "area",
+        "params": [
+          {
+            "name": "grid",
+            "select": {"type": "interval", "encodings": ["x"]},
+            "bind": "scales"
+          }
+        ],
+        "transform": [
+          {"density": "observed_features", "groupby": ["body-site"]}
+        ],
+        "encoding": {
+          "x": {
+            "field": "value",
+            "type": "quantitative",
+            "title": "observed_features",
+            "scale": {"zero": {"expr": "include_zero"}}
+          },
+          "y": {
+            "field": "density",
+            "type": "quantitative",
+            "axis": {
+              "title": "",
+              "grid": false,
+              "labels": false,
+              "ticks": false
+            }
+          },
+          "color": {"field": "body-site", "type": "nominal"}
+        }
+      },
+      {
+        "mark": {"type": "circle", "tooltip": true},
+        "transform": [
+          {
+            "joinaggregate": [
+              {"op": "stdev", "field": "observed_features", "as": "stdev"}
+            ],
+            "groupby": []
+          },
+          {
+            "calculate": "random() * densityNormal(0, 0, datum.stdev)/raindrops + densityNormal(0, 0, datum.stdev)/raindrops/1.5",
+            "as": "jitter"
+          }
+        ],
+        "encoding": {
+          "x": {"field": "observed_features", "type": "quantitative"},
+          "y": {"field": "jitter", "type": "quantitative"},
+          "color": {"field": "body-site"},
+          "tooltip": [
+            {"field": "IDs", "type": "nominal"},
+            {"field": "subject", "type": "nominal"},
+            {"field": "barcode-sequence", "type": "nominal"},
+            {"field": "reported-antibiotic-usage", "type": "nominal"},
+            {"field": "shannon_entropy", "type": "quantitative"},
+            {"field": "pielou_evenness", "type": "quantitative"}
+          ]
+        }
+      },
+      {
+        "mark": {
+          "type": "boxplot",
+          "color": "black",
+          "orient": "horizontal",
+          "ticks": {"stroke": "black", "strokeWidth": 1},
+          "box": {"fill": null, "stroke": "black", "strokeWidth": 2},
+          "median": {"stroke": "black", "strokeWidth": 4, "opacity": 1},
+          "rule": {"stroke": "black", "strokeWidth": 2},
+          "outliers": false
+        },
+        "encoding": {
+          "x": {"field": "observed_features", "type": "quantitative"},
+          "y": {"datum": 0}
+        }
+      }
+    ]
+  },
+  "resolve": {"scale": {"y": "independent"}},
+  "config": {"facet": {"spacing": -2}, "background": "ghostwhite"},
+  "data": {
+    "values": [
+      {
+        "shannon_entropy": 3.8535874654,
+        "observed_features": 57,
+        "pielou_evenness": 0.660665203,
+        "barcode-sequence": "AGTGCGATGCGT",
+        "body-site": "gut",
+        "year": 2009,
+        "month": 3,
+        "day": 17,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 140,
+        "IDs": "L1S105"
+      },
+      {
+        "shannon_entropy": 3.7961935045,
+        "observed_features": 62,
+        "pielou_evenness": 0.6375660638,
+        "barcode-sequence": "ATGGCAGCTCTA",
+        "body-site": "gut",
+        "year": 2008,
+        "month": 10,
+        "day": 28,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "Yes",
+        "days-since-experiment-start": 0,
+        "IDs": "L1S140"
+      },
+      {
+        "shannon_entropy": 4.3278863657,
+        "observed_features": 74,
+        "pielou_evenness": 0.696983472,
+        "barcode-sequence": "CTGAGATACGCG",
+        "body-site": "gut",
+        "year": 2009,
+        "month": 1,
+        "day": 20,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 84,
+        "IDs": "L1S208"
+      },
+      {
+        "shannon_entropy": 4.6454298846,
+        "observed_features": 70,
+        "pielou_evenness": 0.7579075516,
+        "barcode-sequence": "CCGACTGAGATG",
+        "body-site": "gut",
+        "year": 2009,
+        "month": 3,
+        "day": 17,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 140,
+        "IDs": "L1S257"
+      },
+      {
+        "shannon_entropy": 4.5801071943,
+        "observed_features": 69,
+        "pielou_evenness": 0.7497894502,
+        "barcode-sequence": "CCTCTCGTGATC",
+        "body-site": "gut",
+        "year": 2009,
+        "month": 4,
+        "day": 14,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 168,
+        "IDs": "L1S281"
+      },
+      {
+        "shannon_entropy": 4.1298506789,
+        "observed_features": 61,
+        "pielou_evenness": 0.6963469201,
+        "barcode-sequence": "ACACACTATGGC",
+        "body-site": "gut",
+        "year": 2009,
+        "month": 1,
+        "day": 20,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 84,
+        "IDs": "L1S57"
+      },
+      {
+        "shannon_entropy": 3.669308332,
+        "observed_features": 52,
+        "pielou_evenness": 0.6436886474,
+        "barcode-sequence": "ACTACGTGTGGT",
+        "body-site": "gut",
+        "year": 2009,
+        "month": 2,
+        "day": 17,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 112,
+        "IDs": "L1S76"
+      },
+      {
+        "shannon_entropy": 3.0418592625,
+        "observed_features": 42,
+        "pielou_evenness": 0.5641098296,
+        "barcode-sequence": "AGCTGACTAGTC",
+        "body-site": "gut",
+        "year": 2008,
+        "month": 10,
+        "day": 28,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "Yes",
+        "days-since-experiment-start": 0,
+        "IDs": "L1S8"
+      },
+      {
+        "shannon_entropy": 5.5641797234,
+        "observed_features": 131,
+        "pielou_evenness": 0.7911055147,
+        "barcode-sequence": "ACGATGCGACCA",
+        "body-site": "left palm",
+        "year": 2009,
+        "month": 1,
+        "day": 20,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 84,
+        "IDs": "L2S155"
+      },
+      {
+        "shannon_entropy": 5.209123935,
+        "observed_features": 115,
+        "pielou_evenness": 0.7609570529,
+        "barcode-sequence": "AGCTATCCACGA",
+        "body-site": "left palm",
+        "year": 2009,
+        "month": 2,
+        "day": 17,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 112,
+        "IDs": "L2S175"
+      },
+      {
+        "shannon_entropy": 4.5246175269,
+        "observed_features": 106,
+        "pielou_evenness": 0.6725135289,
+        "barcode-sequence": "ATGCAGCTCAGT",
+        "body-site": "left palm",
+        "year": 2009,
+        "month": 3,
+        "day": 17,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 140,
+        "IDs": "L2S204"
+      },
+      {
+        "shannon_entropy": 6.6674262691,
+        "observed_features": 173,
+        "pielou_evenness": 0.8968069505,
+        "barcode-sequence": "CACGTGACATGT",
+        "body-site": "left palm",
+        "year": 2009,
+        "month": 4,
+        "day": 14,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 168,
+        "IDs": "L2S222"
+      },
+      {
+        "shannon_entropy": 4.0100189747,
+        "observed_features": 49,
+        "pielou_evenness": 0.7141987896,
+        "barcode-sequence": "CATATCGCAGTT",
+        "body-site": "left palm",
+        "year": 2008,
+        "month": 10,
+        "day": 28,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "Yes",
+        "days-since-experiment-start": 0,
+        "IDs": "L2S240"
+      },
+      {
+        "shannon_entropy": 4.6587123058,
+        "observed_features": 77,
+        "pielou_evenness": 0.7433973178,
+        "barcode-sequence": "CGTGCATTATCA",
+        "body-site": "left palm",
+        "year": 2009,
+        "month": 1,
+        "day": 20,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 84,
+        "IDs": "L2S309"
+      },
+      {
+        "shannon_entropy": 4.6399402178,
+        "observed_features": 71,
+        "pielou_evenness": 0.7544928479,
+        "barcode-sequence": "CTAACGCAGTCA",
+        "body-site": "left palm",
+        "year": 2009,
+        "month": 3,
+        "day": 17,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 140,
+        "IDs": "L2S357"
+      },
+      {
+        "shannon_entropy": 6.0717309267,
+        "observed_features": 129,
+        "pielou_evenness": 0.8660011586,
+        "barcode-sequence": "CTCAATGACTCA",
+        "body-site": "left palm",
+        "year": 2009,
+        "month": 4,
+        "day": 14,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 168,
+        "IDs": "L2S382"
+      },
+      {
+        "shannon_entropy": 3.0497408487,
+        "observed_features": 22,
+        "pielou_evenness": 0.6838855508,
+        "barcode-sequence": "ACAGTTGCGCGA",
+        "body-site": "right palm",
+        "year": 2008,
+        "month": 10,
+        "day": 28,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "Yes",
+        "days-since-experiment-start": 0,
+        "IDs": "L3S242"
+      },
+      {
+        "shannon_entropy": 4.5148940562,
+        "observed_features": 47,
+        "pielou_evenness": 0.8128223667,
+        "barcode-sequence": "CACGACAGGCTA",
+        "body-site": "right palm",
+        "year": 2009,
+        "month": 1,
+        "day": 20,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 84,
+        "IDs": "L3S294"
+      },
+      {
+        "shannon_entropy": 4.6991462679,
+        "observed_features": 57,
+        "pielou_evenness": 0.8056291575,
+        "barcode-sequence": "AGTGTCACGGTG",
+        "body-site": "right palm",
+        "year": 2009,
+        "month": 2,
+        "day": 17,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 112,
+        "IDs": "L3S313"
+      },
+      {
+        "shannon_entropy": 4.3063084884,
+        "observed_features": 48,
+        "pielou_evenness": 0.7710541455,
+        "barcode-sequence": "CAAGTGAGAGAG",
+        "body-site": "right palm",
+        "year": 2009,
+        "month": 3,
+        "day": 17,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 140,
+        "IDs": "L3S341"
+      },
+      {
+        "shannon_entropy": 5.2612742818,
+        "observed_features": 65,
+        "pielou_evenness": 0.8736222106,
+        "barcode-sequence": "CATCGTATCAAC",
+        "body-site": "right palm",
+        "year": 2009,
+        "month": 4,
+        "day": 14,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 168,
+        "IDs": "L3S360"
+      },
+      {
+        "shannon_entropy": 3.6846829345,
+        "observed_features": 37,
+        "pielou_evenness": 0.7073070197,
+        "barcode-sequence": "ATCGATCTGTGG",
+        "body-site": "right palm",
+        "year": 2008,
+        "month": 10,
+        "day": 28,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "Yes",
+        "days-since-experiment-start": 0,
+        "IDs": "L3S378"
+      },
+      {
+        "shannon_entropy": 5.1924238888,
+        "observed_features": 136,
+        "pielou_evenness": 0.7326209682,
+        "barcode-sequence": "GCGTTACACACA",
+        "body-site": "right palm",
+        "year": 2009,
+        "month": 3,
+        "day": 17,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 140,
+        "IDs": "L4S112"
+      },
+      {
+        "shannon_entropy": 5.566510513,
+        "observed_features": 133,
+        "pielou_evenness": 0.7889847875,
+        "barcode-sequence": "GAACTGTATCTC",
+        "body-site": "right palm",
+        "year": 2009,
+        "month": 4,
+        "day": 14,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 168,
+        "IDs": "L4S137"
+      },
+      {
+        "shannon_entropy": 6.0172612943,
+        "observed_features": 197,
+        "pielou_evenness": 0.789454262,
+        "barcode-sequence": "CTCGTGGAGTAG",
+        "body-site": "right palm",
+        "year": 2009,
+        "month": 1,
+        "day": 20,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 84,
+        "IDs": "L4S63"
+      },
+      {
+        "shannon_entropy": 3.7238838227,
+        "observed_features": 29,
+        "pielou_evenness": 0.7665496894,
+        "barcode-sequence": "CAGTGTCAGGAC",
+        "body-site": "tongue",
+        "year": 2008,
+        "month": 10,
+        "day": 28,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "Yes",
+        "days-since-experiment-start": 0,
+        "IDs": "L5S104"
+      },
+      {
+        "shannon_entropy": 3.4237760273,
+        "observed_features": 25,
+        "pielou_evenness": 0.7372700375,
+        "barcode-sequence": "ATCTTAGACTGC",
+        "body-site": "tongue",
+        "year": 2009,
+        "month": 1,
+        "day": 20,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 84,
+        "IDs": "L5S155"
+      },
+      {
+        "shannon_entropy": 3.5655105199,
+        "observed_features": 32,
+        "pielou_evenness": 0.713102104,
+        "barcode-sequence": "CAGACATTGCGT",
+        "body-site": "tongue",
+        "year": 2009,
+        "month": 2,
+        "day": 17,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 112,
+        "IDs": "L5S174"
+      },
+      {
+        "shannon_entropy": 3.8893006016,
+        "observed_features": 35,
+        "pielou_evenness": 0.7582542411,
+        "barcode-sequence": "CGATGCACCAGA",
+        "body-site": "tongue",
+        "year": 2009,
+        "month": 3,
+        "day": 17,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 140,
+        "IDs": "L5S203"
+      },
+      {
+        "shannon_entropy": 3.5471404348,
+        "observed_features": 32,
+        "pielou_evenness": 0.709428087,
+        "barcode-sequence": "CTAGAGACTCTT",
+        "body-site": "tongue",
+        "year": 2009,
+        "month": 4,
+        "day": 14,
+        "subject": "subject-1",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 168,
+        "IDs": "L5S222"
+      },
+      {
+        "shannon_entropy": 3.537601335,
+        "observed_features": 28,
+        "pielou_evenness": 0.7358727184,
+        "barcode-sequence": "CTGGACTCATAG",
+        "body-site": "tongue",
+        "year": 2008,
+        "month": 10,
+        "day": 28,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "Yes",
+        "days-since-experiment-start": 0,
+        "IDs": "L5S240"
+      },
+      {
+        "shannon_entropy": 3.4835399703,
+        "observed_features": 49,
+        "pielou_evenness": 0.620430987,
+        "barcode-sequence": "GAGGCTCATCAT",
+        "body-site": "tongue",
+        "year": 2009,
+        "month": 1,
+        "day": 20,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 84,
+        "IDs": "L6S20"
+      },
+      {
+        "shannon_entropy": 3.7069955591,
+        "observed_features": 49,
+        "pielou_evenness": 0.6602292304,
+        "barcode-sequence": "GATACGTCCTGA",
+        "body-site": "tongue",
+        "year": 2009,
+        "month": 3,
+        "day": 17,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 140,
+        "IDs": "L6S68"
+      },
+      {
+        "shannon_entropy": 4.3002175931,
+        "observed_features": 50,
+        "pielou_evenness": 0.7619289806,
+        "barcode-sequence": "GATTAGCACTCT",
+        "body-site": "tongue",
+        "year": 2009,
+        "month": 4,
+        "day": 14,
+        "subject": "subject-2",
+        "reported-antibiotic-usage": "No",
+        "days-since-experiment-start": 168,
+        "IDs": "L6S93"
+      }
+    ]
+  }
+}
