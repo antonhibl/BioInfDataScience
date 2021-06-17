@@ -1,0 +1,21 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"url": "data/penguins.json"},
+  "mark": "bar",
+    "height": 600,
+    "width": 750,
+  "transform": [
+    {
+    "aggregate": [{
+      "op": "argmax",
+      "field": "Body Mass (g)",
+      "as": "argmax_Body_Mass"
+    }],
+    "groupby": ["Island"]
+  }],
+  "encoding": {
+    "x": {"field": "Island", "type": "nominal"},
+    "y": {"field": "argmax_Body_Mass[Body Mass (g)]", "type": "quantitative"},
+    "color": {"field": "Island", "type": "nominal"}
+  }
+}
